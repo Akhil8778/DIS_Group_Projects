@@ -1,0 +1,32 @@
+<html lang="en">
+<head>
+    <head>
+        <title>HTMl Practice</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='aboutus.css') }}">
+        </head>
+        <style>
+            
+        </style>
+</head>
+<body>
+    <div  class="navbar">
+        <a href="{{ url_for('index') }}">
+            <button>
+                <img src="{{ url_for('static', filename='Images/FoodGasm.png') }}" class="logo" align="top" >
+            </button>
+        </a>
+        <ul>
+            
+            <li><button type="button"><a href="{{ url_for('Menu') }}">Menu</a></button></li>
+            <li><button type="button"><a href="{{ url_for('signin') }}">SignUp</a></button></li>
+            <li><button type="button"><a href="#" onclick="location.href='{{ url_for('login') }}';">LogIn</a></button></li>
+            <li><button type="button"><a href="{{ url_for('aboutus') }}">About Us</a></button></li>
+            <li><button type="button"><a href="{{ url_for('Popular') }}">Popular Items</a></button></li>
+        </ul>
+    </div>  
+    
+</body>
+</html>

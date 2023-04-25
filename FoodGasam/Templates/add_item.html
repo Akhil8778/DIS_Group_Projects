@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Item</title>
+</head>
+<body>
+	<h1>Add Item</h1>
+	<form action="{{ url_for('add_item') }}" method="post">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name" required><br><br>
+		<label for="price">Price:</label>
+		<input type="number" id="price" name="price" required><br><br>
+		<input type="submit" value="Add Item">
+	</form>
+</body>
+</html>
+<html>
+   <body>
+      
+      <form action="{{ url_for('add_item') }}" method="POST">
+         <h3>Item Information</h3>
+         
+         Category<br>
+         <input type="text" name="category"><br>
+         
+         Item Name<br>
+         <input type="text" name="item_name"><br>
+         
+         Price<br>
+         <input type="number" name="price"><br>
+         
+         Item Image<br>
+         <input type="file" name="item_image"><br>
+         
+         <input type="submit" value="Submit">
+      </form>
+      
+   </body>
+</html>
