@@ -2,7 +2,7 @@
 <html>
    <head>
       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-      <link rel="stylesheet" href="{{ url_for('static', filename='enteritem.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='enteritem.css') }}">
       <style>
          body {
             background-image: url("{{ url_for('static', filename='images/login_signup.png') }}");
@@ -15,13 +15,13 @@
          }
          input[type="text"], input[type="number"], select {
             font-size: 16px;
-            padding: 5px;
+            padding: 2px;
             border-radius: 5px;
             border: 1px solid #ccc;
          }
          input[type="submit"] {
             font-size: 18px;
-            padding: 10px;
+            padding: 5px;
             border-radius: 5px;
             border: none;
             background-color: #007bff;
@@ -34,11 +34,12 @@
    </head>
    <body>
       <div>
-         {% include 'navbarcustom.html' %}
+         {% include 'navbaradmin.html' %}
    </div>
       <form action="{{ url_for('add_item') }}" method="POST" enctype="multipart/form-data">
+         <span style="font-size: 28px; font-weight: bold; color: darkblue;">{{msg}}</span>
          <label for="category" style="font-size: 24px;">Select category:</label>
-         <select name="category" id="category" style="font-size: 20px;">
+         <select name="category" id="category" style="font-size: 18px;">
             <option value="Non-Veg Appetizer">Non-Veg Appetizer</option>
             <option value="Veg Appetizer">Veg Appetizer</option>
             <option value="Non Veg Biriyanis">Non Veg Biriyanis</option>
@@ -51,14 +52,15 @@
             <option value="Naans & Rotis">Naans & Rotis</option>
          </select><br><br>
          <label for="item_name" style="font-size: 24px;">Item Name:</label><br>
-         <input type="text" name="item_name" style="font-size: 24px;"><br><br>
+         <input type="text" name="item_name" style="font-size: 24px;" required><br><br>
          <label for="price" style="font-size: 24px;">Price:</label><br>
-         <input type="number" name="price" step="0.01" style="font-size: 24px;"><br><br>
+         <input type="number" name="price" step="0.01" style="font-size: 24px;" required><br><br>
          
          <input type="submit" value="Submit" style="font-size: 20px;">
          <br><br>
-         <a href="{{ url_for('indexadmin') }}" style="font-size: 20px;">Go back to home page</a>
-      </form>
       
+         <a href="{{ url_for('indexadmin') }}" style="font-size: 20px; margin-bottom: 10px;">Go back to home page</a>
+      </form>
+      {% include 'footer.html' %}
    </body>
 </html>

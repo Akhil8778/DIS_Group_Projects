@@ -31,7 +31,7 @@ def Menu():
      with sqlite3.connect('database.db') as con:
         con.row_factory = sqlite3.Row
         cur = con.cursor()
-        cur.execute("SELECT * FROM items")
+        cur.execute("SELECT * FROM items order by category")
         rows = cur.fetchall()
         return render_template('Menu.html', rows=rows)
 
@@ -40,7 +40,7 @@ def Menucustom():
      with sqlite3.connect('database.db') as con:
         con.row_factory = sqlite3.Row
         cur = con.cursor()
-        cur.execute("SELECT * FROM items")
+        cur.execute("SELECT * FROM items order by category")
         rows = cur.fetchall()
         return render_template('Menucustom.html', rows=rows)   
 
@@ -108,26 +108,38 @@ def itemadd():
 
 import sqlite3
 
-conn = sqlite3.connect('database.db')
-print("Opened database successfully")
+
 """conn.execute('DROP TABLE IF EXISTS items')
-conn.commit()
-conn.execute('''CREATE TABLE items 
-             (id INTEGER PRIMARY KEY,
-             category TEXT,
-             item_name TEXT,
-             price REAL);''')"""
-print("Table created successfully")
+conn.commit()"""
 '''conn.execute('DROP TABLE IF EXISTS users')
 conn.commit()'''
+conn = sqlite3.connect('database.db')
+print("Opened database successfully")
+conn.execute('''CREATE TABLE IF NOT EXISTS items 
+             (id INTEGER PRIMARY KEY,
+             category TEXT not null,
+             item_name TEXT not null,
+             price REAL not null);''')
+print("Table created successfully")
+
 conn.execute('CREATE TABLE  IF NOT EXISTS users(first_name TEXT, last_name TEXT,number Varchar,age Integer, email VARCHAR, password VARCHAR,repassword VARCHAR)')
 print('Table Users created successfully', flush=True)
 conn.close()
 
+
+# DELETING EXTRA COLUMNS
 # conn = sqlite3.connect('database.db')
 # c = conn.cursor()
-# c.execute("DELETE FROM items WHERE id in (12,13,14)")
+# c.execute("DELETE FROM items WHERE id in (11,12,13,14,15,16,17)")
 # print('deleted successfully', flush=True)
+# conn.commit()
+# conn.close() 
+
+# FUTURE ENHANCEMENT 
+# conn = sqlite3.connect('database.db')
+# c = conn.cursor()
+# c.execute("update table items set price =12.50 where item_name ='paneer biriyani'")
+# print('updated successfully', flush=True)
 # conn.commit()
 # conn.close() 
 
@@ -153,13 +165,13 @@ def add_item():
                             (category, item_name, price))
                 
                 con.commit()
-                msg = "Record successfully added"
+                msg = "New Item has been successfully added to the menu"
                 
         except:
             con.rollback()
             msg = "Error in insert operation"
         finally:
-            return render_template("result.html", msg=msg)
+            return render_template("item.html", msg=msg)
         
 
 
@@ -216,7 +228,7 @@ def addrec():
         print("An unexpected error occurred:", e)
         msg = "Error in insert operation"
 
-    return render_template("index.html", msg=msg)
+    return render_template("login.html", msg=msg)
 
 
 @app.route('/list')
@@ -233,26 +245,7 @@ def list():
 
 
 
-@app.route('/loginn', methods=['GET', 'POST'])
-def loginn():
-    error = None
-    if request.method == 'POST':
-        username = request.form['email']
-        password = request.form['password']
-        
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM users WHERE email = ? AND password = ?', (username, password))
-        user = cursor.fetchone()
-        
-        if user is None:
-            error = 'Invalid credentials. Please try again.'
-        else:
-            session['logged_in'] = True
-            session['username'] = user[4]  # store the email as the username in the session
-            return redirect(url_for('index'))
-    
-    return render_template('index_custom.html', error=error)
+
 
 @app.route('/login_post', methods=['POST'])
 def login_post():

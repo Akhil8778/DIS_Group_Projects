@@ -1,6 +1,39 @@
 <html>
+   <head>
+      <style>
+          table {
+              border-collapse: collapse;
+              width: 100%;
+          }
+          th, td {
+              padding: 12px;
+              text-align: left;
+              border-bottom: 1px solid #ddd;
+          }
+          th {
+              background-color: #4CAF50;
+              color: white;
+          }
+          tr:hover {
+              background-color: #f5f5f5;
+          }
+          a {
+              display: inline-block;
+              
+              text-align: center;
+              color: rgb(22, 3, 3);
+              text-decoration: none;
+              border-radius: 4px;
+          }
+          a:hover {
+              background-color: #0ad7cd;
+          }
+      </style>
+  </head>
+  
     <body>
-
+      {% include 'navbaradmin.html' %}
+      <h1 style="text-align:center; "> Our Active Users </h1>
  <table border = 1>
 <thead>
  <td>First Name </td>
@@ -20,8 +53,7 @@
  </tr>
 {% endfor %}
  </table>
- 
- <a href = "/">Go back to home page</a>
-
+<br>
+ {% include 'footer.html' %}
 </body>
 </html>
