@@ -5,15 +5,18 @@
               border-collapse: collapse;
               width: 100%;
           }
-          th, td {
+          td {
               padding: 12px;
               text-align: left;
               border-bottom: 1px solid #ddd;
           }
-          th {
-              background-color: #4CAF50;
-              color: white;
-          }
+          thead {
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #273127;
+  color: white;
+  padding: 16px;
+}
           tr:hover {
               background-color: #f5f5f5;
           }
@@ -28,6 +31,12 @@
           a:hover {
               background-color: #0ad7cd;
           }
+
+          body {
+      background-image: url("{{ url_for('static', filename='Images/login_signup.png') }}");
+      background-repeat: no-repeat;
+      background-size: cover;
+      }
       </style>
   </head>
   
