@@ -22,7 +22,7 @@ a {
 }
 
 a:hover {
-    color: #c62828;
+    color: #240bde;
 }
 
 .alert {
@@ -37,7 +37,7 @@ a:hover {
   
 
 .active {
-    background-color: #c62828;
+    background-color: #3f18bf;
     color: white;
 }
 
@@ -100,8 +100,8 @@ tr:nth-child(even) {
 }
 
 td button {
-    background-color: #c62828;
-    color: white;
+    background-color: #070ab0;
+    color: rgb(84, 53, 219);
     border: none;
     padding: 8px 12px;
     border-radius: 4px;
@@ -109,7 +109,7 @@ td button {
 }
 
 td button:hover {
-    background-color: #b71c1c;
+    background-color: #0e0bea;
 }
 
 td select {

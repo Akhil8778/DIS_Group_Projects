@@ -3,7 +3,7 @@ import io
 from PIL import Image
 from multiprocessing import connection
 from typing import ItemsView
-from flask import Flask, Response, redirect, jsonify, render_template,session, request, url_for
+from flask import Flask, Response, redirect, jsonify, render_template,session, request, url_for, flash
 
 import sqlite3
 app = Flask(__name__)
@@ -34,15 +34,7 @@ def Menu():
         cur.execute("SELECT * FROM items order by category")
         rows = cur.fetchall()
         return render_template('Menu.html', rows=rows)
-
-@app.route("/Menucustom/")
-def Menucustom():
-     with sqlite3.connect('database.db') as con:
-        con.row_factory = sqlite3.Row
-        cur = con.cursor()
-        cur.execute("SELECT * FROM items order by category")
-        rows = cur.fetchall()
-        return render_template('Menucustom.html', rows=rows)   
+ 
 
 @app.route('/signup')
 def signin():
@@ -53,6 +45,7 @@ def signin():
 def login():
     # code to execute when the /login endpoint is accessed
     return render_template('login.html')
+
 @app.route('/Popular')
 def Popular():
     # code to execute when the /login endpoint is accessed
@@ -83,22 +76,21 @@ def biriyani():
 @app.route('/prawns')
 def prawns():
     return render_template('prawns.html')
+
 #------------SignUp----
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
-@app.route('/index_custom')
-def index_custom():
-    return render_template('index_custom.html')
 
-@app.route('/indexadmin')
-def indexadmin():
-    return render_template('index_admin.html')
-
+#------------add_item--
 @app.route('/itemadd')
 def itemadd():
     return render_template('item.html')
-#------------add_item--
+
+@app.route('/updateitem')
+def updateitem():
+    return render_template('update_item.html')
+
 
 #-------sql-----
 
@@ -123,76 +115,8 @@ print('Table Users created successfully', flush=True)
 conn.close()
 
 
-# DELETING EXTRA COLUMNS
-# conn = sqlite3.connect('database.db')
-# c = conn.cursor()
-# c.execute("DELETE FROM items WHERE id in (11,12,13,14,15,16,17)")
-# print('deleted successfully', flush=True)
-# conn.commit()
-# conn.close() 
 
-# FUTURE ENHANCEMENT 
-# conn = sqlite3.connect('database.db')
-# c = conn.cursor()
-# c.execute("update table items set price =12.50 where item_name ='paneer biriyani'")
-# print('updated successfully', flush=True)
-# conn.commit()
-# conn.close() 
-
-@app.route('/enternew')
-def new_item():
-   return render_template('item.html')
-
-
-@app.route('/add_item', methods=['GET', 'POST'])
-def add_item():
-    if request.method == 'POST':
-        try:
-            category = request.form['category']
-            item_name = request.form['item_name']
-            price = request.form['price']
-           
-            
-            with sqlite3.connect('database.db') as con:
-                cur = con.cursor()
-                cur.execute("INSERT INTO items (category, item_name, price) VALUES (?, ?, ?)", 
-                            (category, item_name, price))
-                
-                con.commit()
-                msg = "New Item has been successfully added to the menu"
-                
-        except:
-            con.rollback()
-            msg = "Error in insert operation"
-        finally:
-            return render_template("item.html", msg=msg)
-        
-
-
-@app.route('/checkout', methods=['GET', 'POST'])
-def checkout():
-    if request.method == 'POST':
-        # Process the form data and complete the checkout
-        # Redirect to a confirmation page or back to the homepage
-        # Here you can add the code to process the form data and complete the checkout,
-        # then redirect to a confirmation page or back to the homepage, depending on
-        # whether the checkout was successful or not.
-
-    # If the request method is GET, render the checkout page
-     return render_template('checkout.html', cart=cart, total=total)
-
-
-
-
-""" Well it worked but implemented the same function in menu.html @app.route('/view_items')
-def view_items():
-    with sqlite3.connect('database.db') as con:
-        con.row_factory = sqlite3.Row
-        cur = con.cursor()
-        cur.execute("SELECT * FROM items")
-        rows = cur.fetchall()
-    return render_template('Menu.html', rows=rows)"""
-
+# SIGNUP FUNCTIONALITY
 
 @app.route('/addrec', methods=['POST'])
 def addrec():
@@ -233,24 +157,7 @@ def addrec():
         msg = "Error in insert operation"
         success = False
 
-    
-
-
-@app.route('/list')
-def list():
-    con = sqlite3.connect("database.db")
-    con.row_factory = sqlite3.Row
-
-    cur = con.cursor()
-    cur.execute("select first_name,last_name,number,age,email from users")
-
-    rows = cur.fetchall(); 
-    return render_template("signuplist.html",rows = rows)
-
-
-
-
-
+# LOGIN FUNCTIONALITY 
 
 @app.route('/login_post', methods=['POST'])
 def login_post():
@@ -310,14 +217,6 @@ def get_user_firstname(email):
     
     return user[0] if user else ''
 
-# @app.route('/indexcus')
-# def indexcus():
-#     if 'email' in session:
-#         user = session.get('user', None)
-#         if user:
-#             firstname = session.get('firstname', '')
-#             return render_template('index_custom.html', firstname=firstname)
-#     return render_template('index_custom.html')
 
 
 @app.route('/logout')
@@ -325,8 +224,62 @@ def logout():
     session.pop('email', None)
     return redirect(url_for('index'))
 
+# ADMIN FUNCTIONALITIES
+
+@app.route('/list')
+def list():
+    con = sqlite3.connect("database.db")
+    con.row_factory = sqlite3.Row
+
+    cur = con.cursor()
+    cur.execute("select first_name,last_name,number,age,email from users")
+
+    rows = cur.fetchall(); 
+    return render_template("signuplist.html",rows = rows)
 
 
+@app.route('/add_item', methods=['GET', 'POST'])
+def add_item():
+    if request.method == 'POST':
+        try:
+            category = request.form['category']
+            item_name = request.form['item_name']
+            price = request.form['price']
+           
+            
+            with sqlite3.connect('database.db') as con:
+                cur = con.cursor()
+                cur.execute("INSERT INTO items (category, item_name, price) VALUES (?, ?, ?)", 
+                            (category, item_name, price))
+                
+                con.commit()
+                msg = "New Item has been successfully added to the menu"
+                
+        except:
+            con.rollback()
+            msg = "Error in insert operation"
+        finally:
+            return render_template("item.html", msg=msg)
+
+@app.route('/update_item_price', methods=['POST'])
+def update_item_price():
+    item_name = request.form['item_name']
+    new_price = request.form['new_price']
+    
+    # Update the item price in the database
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    cur.execute("UPDATE items SET price = ? WHERE item_name = ?", (new_price, item_name))
+    conn.commit()
+    msg1 = "Price has been updated"
+    
+    # Redirect to the item entry page or any other page you want to display after updating the price
+    return render_template("update_item.html", msg1=msg1)
+
+
+
+
+# EXTRA TRIALS 
 # @app.route('/home1')
 # def home1():
 #     # Check if the email is set in session
@@ -345,6 +298,13 @@ def logout():
 
 
 
+# DELETING EXTRA COLUMNS
+# conn = sqlite3.connect('database.db')
+# c = conn.cursor()
+# c.execute("DELETE FROM items WHERE id in (11,12,13,14,15,16,17)")
+# print('deleted successfully', flush=True)
+# conn.commit()
+# conn.close() 
 
 """@app.route('/view_items_by_category', methods=['GET', 'POST'])
 def view_items_by_category():
@@ -362,16 +322,6 @@ def view_items_by_category():
             cur.execute("SELECT DISTINCT category FROM items")
             categories = cur.fetchall()
         return render_template('select_category.html', categories=categories)"""
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -405,32 +355,6 @@ def view_items_by_category():
         row['item_image'] = image
     
     return render_template('view_items_by_category.html', rows=rows)"""""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #------to delete the db--------------   
