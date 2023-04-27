@@ -34,7 +34,7 @@
    </head>
    <body>
       <div>
-         {% include 'navbaradmin.html' %}
+         {% include 'navbar.html' %}
    </div>
       <form action="{{ url_for('add_item') }}" method="POST" enctype="multipart/form-data">
          <span style="font-size: 28px; font-weight: bold; color: darkblue;">{{msg}}</span>
@@ -59,7 +59,7 @@
          <input type="submit" value="Submit" style="font-size: 20px;">
          <br><br>
       
-         <a href="{{ url_for('indexadmin') }}" style="font-size: 20px; margin-bottom: 10px;">Go back to home page</a>
+         <a href="{{ url_for('index') }}" style="font-size: 20px; margin-bottom: 10px;">Go back to home page</a>
       </form>
       {% include 'footer.html' %}
    </body>

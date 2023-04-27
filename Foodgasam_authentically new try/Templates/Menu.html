@@ -35,28 +35,32 @@
             cart.length = 0;
             updateCart();
         }
-
-        f
-
-    </script>
-    {% if 'email' in session %}
-    <script>
-      const logoutUrl = "{{ url_for('logout') }}";
-      function proceed() {
-        const totalPriceElem = document.getElementById('total-price');
-        const totalPrice = totalPriceElem.innerText;
-        const confirmMessage = `Place an order for ${totalPrice}`;
-        const confirmed = confirm(confirmMessage);
-        if (confirmed) {
-          setTimeout(function() {
-            alert("Your order has been placed for pickup");
-            window.location.href = "{{ url_for('index') }}";
-          }, 10);
-        }
+</script>
+        <script>
+        var userEmail = "{{ session['email'] }}" || null;
+        </script>
+<script>
+function proceed() {
+    if (userEmail) {
+      const totalPriceElem = document.getElementById('total-price');
+      const totalPrice = totalPriceElem.innerText;
+      const confirmMessage = `Place an order for ${totalPrice}`;
+      const confirmed = confirm(confirmMessage);
+      if (confirmed) {
+        setTimeout(function() {
+          alert("Your order has been placed for pickup");
+          window.location.href = "{{ url_for('index') }}";
+        }, 10);
+      }
+    } else {
+      window.location.href = "{{ url_for('login') }}";
     }
-    </script>
-  {% endif %}
-  
+  }
+</script>
+      
+
+
+
     
 </head>
 <body>

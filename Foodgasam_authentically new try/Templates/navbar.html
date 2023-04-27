@@ -18,20 +18,28 @@
             </button>
         </a>
         <ul>
-        {% if 'email' in session %}
-            <li><button type="button"><a href="{{ url_for('Menu') }}">Menu</a></button></li>
-            <li><button type="button"><a href="{{ url_for('logout') }}">Logout</a></button></li>
-        {% else %}
-            <li><button type="button"><a href="{{ url_for('Menu') }}">Menu</a></button></li>
-            <li><button type="button"><a href="#" onclick="location.href='{{ url_for('login') }}';">LogIn</a></button></li>
-        {% endif %}
-        
-        <li><button type="button"><a href="{{ url_for('aboutus') }}">About Us</a></button></li>
-        <li><button type="button"><a href="{{ url_for('Popular') }}">Popular Items</a></button></li>
-            
-            
+            {% if 'email' in session %}
+                {% if session['email'] == 'admin@gmail.com' %}
+                    <li><button type="button"><a href="{{ url_for('aboutus') }}">About Us</a></button></li>
+                    <li><button type="button"><a href="{{ url_for('Popular') }}">Popular Items</a></button></li>    
+                    <li><button type="button"><a href="{{ url_for('Menu') }}">Menu</a></button></li>      
+                    <li><button type="button"><a href="{{ url_for('itemadd') }}">Add Items</a></button></li>
+                    <li><button type="button"><a href="{{ url_for('list') }}">Active Users</a></button></li>
+                    <li><button type="button"><a href="{{ url_for('logout') }}">Logout</a></button></li>   
+                {% else %}
+                    <li><button type="button"><a href="{{ url_for('Menu') }}">Menu</a></button></li>
+                    <li><button type="button"><a href="{{ url_for('aboutus') }}">About Us</a></button></li>
+                    <li><button type="button"><a href="{{ url_for('Popular') }}">Popular Items</a></button></li>
+                    <li><button type="button"><a href="{{ url_for('logout') }}">LogOut</a></button></li>
+                {% endif %}
+            {% else %}
+                <li><button type="button"><a href="{{ url_for('Menu') }}">Menu</a></button></li>
+                <li><button type="button"><a href="#" onclick="location.href='{{ url_for('login') }}';">LogIn</a></button></li>
+                <li><button type="button"><a href="{{ url_for('aboutus') }}">About Us</a></button></li>
+                <li><button type="button"><a href="{{ url_for('Popular') }}">Popular Items</a></button></li>
+            {% endif %}
         </ul>
-    </div>  
+    </div>
     
 </body>
 </html>

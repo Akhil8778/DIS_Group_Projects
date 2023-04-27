@@ -58,10 +58,6 @@ def Popular():
     # code to execute when the /login endpoint is accessed
     return render_template('Data_Analytics.html')
 
-@app.route('/Popularcustom')
-def Popularcustom():
-    # code to execute when the /login endpoint is accessed
-    return render_template('analyticscustom.html')
 
 #---------- Specials----
 @app.route('/Dosa')
@@ -201,6 +197,7 @@ def view_items():
 @app.route('/addrec', methods=['POST'])
 def addrec():
     try:
+        # get form data
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         number = request.form['number']
@@ -209,24 +206,34 @@ def addrec():
         password = request.form['password']
         repassword = request.form['repassword']
 
-
+        # insert data into database
         with sqlite3.connect("database.db") as con:
             cur = con.cursor()
             cur.execute("INSERT INTO users (first_name, last_name, number, age, email, password,repassword) VALUES (?, ?, ?, ?, ?, ?,?)",
                         (first_name, last_name, number, age, email, password,repassword))
             con.commit()
+
+            # set success message and flag
+            success = True
             msg = "Record successfully added"
+            return render_template("login.html", msg=msg, success=success)
+
     except sqlite3.Error as e:
         print("An error occurred:", e.args[0])
         msg = "Error in insert operation"
+        success = False
+
     except KeyError as e:
         print("Missing form field:", e)
         msg = "Please fill out all required fields"
+        success = False
+
     except Exception as e:
         print("An unexpected error occurred:", e)
         msg = "Error in insert operation"
+        success = False
 
-    return render_template("login.html", msg=msg)
+    
 
 
 @app.route('/list')
@@ -303,14 +310,14 @@ def get_user_firstname(email):
     
     return user[0] if user else ''
 
-@app.route('/indexcus')
-def indexcus():
-    if 'email' in session:
-        user = session.get('user', None)
-        if user:
-            firstname = session.get('firstname', '')
-            return render_template('index_custom.html', firstname=firstname)
-    return render_template('index_custom.html')
+# @app.route('/indexcus')
+# def indexcus():
+#     if 'email' in session:
+#         user = session.get('user', None)
+#         if user:
+#             firstname = session.get('firstname', '')
+#             return render_template('index_custom.html', firstname=firstname)
+#     return render_template('index_custom.html')
 
 
 @app.route('/logout')
